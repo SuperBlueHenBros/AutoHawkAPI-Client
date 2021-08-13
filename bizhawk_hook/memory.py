@@ -122,10 +122,9 @@ class Memory:
             endianness[0]
         ])
     
-    def _format_query(self, address: int, type_: type, signed: bool,
-                        length: int, endianness: str, value: Union[int, float]):
+    def _format_query(self, address: int, type_: type = bytes, signed: bool = False,
+                        length: int = 1, endianness: str = 'big', value: Union[int, float] = None):
         """Format all request parameters into a valid query for a request"""
 
         tsle = self._format_tsle(type_, signed, length, endianness)            
         return f'{self.domain}/{address}/{tsle}/{"" if value is None else value}'
-        
