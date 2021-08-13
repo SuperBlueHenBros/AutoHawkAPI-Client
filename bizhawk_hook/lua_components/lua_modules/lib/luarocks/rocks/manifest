@@ -1,0 +1,78 @@
+modules = {
+  ['socket.http']={
+    'luasocket/2.0.2-6'
+  },
+  socket={
+    'luasocket/2.0.2-6'
+  },
+  ['socket.url']={
+    'luasocket/2.0.2-6'
+  },
+  ['socket.smtp']={
+    'luasocket/2.0.2-6'
+  },
+  ['socket.tp']={
+    'luasocket/2.0.2-6'
+  },
+  ['socket.ftp']={
+    'luasocket/2.0.2-6'
+  },
+  ['ltn12']={
+    'luasocket/2.0.2-6'
+  },
+  mime={
+    'luasocket/2.0.2-6'
+  },
+  ['socket.core']={
+    'luasocket/2.0.2-6'
+  },
+  ['mime.core']={
+    'luasocket/2.0.2-6'
+  }
+}
+commands = {}
+dependencies = {
+  luasocket={
+    ['2.0.2-6']={
+      {
+        name='lua',
+        constraints={
+          {
+            version={
+              5, 1, string='5.1'
+            },
+            op='>='
+          }, {
+            version={
+              5, 2, string='5.2'
+            },
+            op='<'
+          }
+        }
+      }
+    }
+  }
+}
+repository = {
+  luasocket={
+    ['2.0.2-6']={
+      {
+        modules={
+          ['socket.http']='socket/http.lua',
+          socket='socket.lua',
+          ['socket.url']='socket/url.lua',
+          ['socket.smtp']='socket/smtp.lua',
+          ['socket.ftp']='socket/ftp.lua',
+          ['mime.core']='mime/core.dll',
+          ['ltn12']='ltn12.lua',
+          mime='mime.lua',
+          ['socket.core']='socket/core.dll',
+          ['socket.tp']='socket/tp.lua'
+        },
+        commands={},
+        dependencies={},
+        arch='installed'
+      }
+    }
+  }
+}
