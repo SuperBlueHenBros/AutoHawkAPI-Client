@@ -129,3 +129,60 @@ class Memory:
 
         tsle = self._format_tsle(type_, signed, length, endianness)            
         return f'{self.domain}/{address}/{tsle}/{"" if value is None else value}'
+
+
+    def read_byte(self, address: int):
+        """Read byte from memory"""
+        return self._request(self._format_query(
+            address=address,
+            type_=bytes,
+            value=None
+        ))
+
+    def write_byte(self, address: int, value: int):
+        """Write byte from memory"""
+        return self._request(self._format_query(
+            address=address,
+            type_=bytes,
+            value=value
+        ))
+
+    def read_int(self, address: int, signed: bool=False, length: int=1, endianness: str='big'):
+        """Read integer from memory"""
+        return self._request(self._format_query(
+            address=address,
+            type_=int,
+            signed=signed,
+            length=length,
+            endianness=endianness,
+            value=None
+        ))
+
+    def write_int(self, address: int, value: int, signed: bool=False, length: int=1, endianness: str='big'):
+        """Write integer from memory"""
+        return self._request(self._format_query(
+            address=address,
+            type_=int,
+            signed=signed,
+            length=length,
+            endianness=endianness,
+            value=value
+        ))
+
+    def read_float(self, address: int, endianness: str='big'):
+        """Read float from memory"""
+        return self._request(self._format_query(
+            address=address,
+            type_=float,
+            endianness=endianness,
+            value=None
+        ))
+
+    def write_float(self, address: int, value: int, endianness: str='big'):
+        """Write float from memory"""
+        return self._request(self._format_query(
+            address=address,
+            type_=float,
+            endianness=endianness,
+            value=value
+        ))
