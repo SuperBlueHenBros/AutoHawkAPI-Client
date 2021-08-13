@@ -106,7 +106,7 @@ class Memory:
     def _format_tsle(self, type_: type, signed: bool, length: int, endianness: str):
         """Format the type, signage, length, and endianness for a request"""
 
-        if type_ in (bytes, int, float):
+        if type_ not in (bytes, int, float):
             raise ValueError('Type must be bytes, int or float')
 
         if length not in (1, 2, 3, 4):
