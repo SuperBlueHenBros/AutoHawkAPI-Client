@@ -10,7 +10,9 @@ from .exceptions import InvalidRequest
 class Memory:
     """Client for reading from and writing to Bizhawk memory"""
 
-    def __init__(self, address: str = '127.0.0.1', port: int = 16154):
+    def __init__(self, domain: str, address: str = '127.0.0.1', port: int = 16154):
+        self.domain = domain
+        
         self.address = address
         self.port = port
 
@@ -120,15 +122,10 @@ class Memory:
             endianness[0]
         ])
     
-    def _format_query(self, domain: str, address: int, type_: type, signed: bool,
+    def _format_query(self, address: int, type_: type, signed: bool,
                         length: int, endianness: str, value: Union[int, float]):
         """Format all request parameters into a valid query for a request"""
 
-        tsle = self._format_tsle(type_, signed, length, endianness)
-
-        if domain is None:
-            domain = ""
-        if value is None:
-            value = ""
-            
-        return f'{domain}/{address}/{tsle}/{value}'
+        tsle = self._format_tsle(type_, signed, length, endianness)            
+        return f'{self.domain}/{address}/{tsle}/{"" if value is None else value}'
+        
