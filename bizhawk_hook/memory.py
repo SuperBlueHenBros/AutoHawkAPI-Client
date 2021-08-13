@@ -10,11 +10,12 @@ from .exceptions import InvalidRequest
 class Memory:
     """Client for reading from and writing to Bizhawk memory"""
 
-    def __init__(self, domain: str, address: str = '127.0.0.1', port: int = 16154):
+    def __init__(self, domain: str, address: str='127.0.0.1', port: int=16154):
         self.domain = domain
         
         self.address = address
         self.port = port
+
 
     def _request(self, query: Union[bytes, str]):
         """Send a request to the Bizhawk Lua memory hook
@@ -84,7 +85,7 @@ class Memory:
 
         return message
 
-    def _receive(self, socket: Socket, n: int = 128):
+    def _receive(self, socket: Socket, n: int=128):
         """Receive data until end of stream"""
 
         # Receive data in packets
@@ -122,8 +123,8 @@ class Memory:
             endianness[0]
         ])
     
-    def _format_query(self, address: int, type_: type = bytes, signed: bool = False,
-                        length: int = 1, endianness: str = 'big', value: Union[int, float] = None):
+    def _format_query(self, address: int, type_: type=bytes, signed: bool=False,
+                        length: int=1, endianness: str='big', value: Union[int, float]=None):
         """Format all request parameters into a valid query for a request"""
 
         tsle = self._format_tsle(type_, signed, length, endianness)            
