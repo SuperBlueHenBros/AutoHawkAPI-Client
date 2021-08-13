@@ -61,6 +61,7 @@ class Memory:
         # and a maintained connection should be negligable.)
 
         socket = Socket(AF_INET, SOCK_STREAM)
+        socket.settimeout(5)
         socket.connect((self.address, self.port))
 
         # Make sure query is a byte string
