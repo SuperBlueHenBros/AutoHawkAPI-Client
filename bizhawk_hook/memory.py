@@ -99,3 +99,36 @@ class Memory:
             buffer.append(data)
 
         return b''.join(buffer)
+
+    def _format_tsle(self, type_: type, signed: bool, length: int, endianness: str):
+        """Format the type, signage, length, and endianness for a request"""
+
+        if type_ in (bytes, int, float):
+            raise ValueError('Type must be bytes, int or float')
+
+        if length not in (1, 2, 3, 4):
+            raise ValueError('Length must be 1, 2, 3 or 4 bytes')
+
+        if endianness not in ('little', 'big'):
+            raise ValueError('Endianness must be little or big')
+
+
+        return ''.join([
+            type_.__name__[0],
+            'us'[signed],
+            str(length),
+            endianness[0]
+        ])
+    
+    def _format_query(self, domain: str, address: int, type_: type, signed: bool,
+                        length: int, endianness: str, value: Union[int, float]):
+        """Format all request parameters into a valid query for a request"""
+
+        tsle = self._format_tsle(type_, signed, length, endianness)
+
+        if domain is None:
+            domain = ""
+        if value is None:
+            value = ""
+            
+        return f'{domain}/{address}/{tsle}/{value}'
