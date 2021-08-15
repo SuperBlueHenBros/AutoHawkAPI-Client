@@ -77,14 +77,28 @@ class Memory:
         socket.close()
 
         # Extract response code and message
-        code, _, message = response.partition('_')
+        code, _, message = response.decode('UTF-8').partition('_')
         code = int(code)
 
-        # Anything but 0 is an error message
-        if code != 0:
-            raise InvalidRequest(code, message)
 
-        return message
+        # Successfully wrote to memory
+        if code == 0:
+            return True
+
+        # Successfully read byte
+        if code == 1:
+            return response[response.index(b'_'):]
+
+        # Successfully read integer
+        if code == 2:
+            return int(message)
+
+        # Successfully read float
+        if code == 3:
+            return float(message)
+
+
+        raise InvalidRequest(code, message)
 
     def _receive(self, socket: Socket, n: int=128):
         """Receive data until end of stream"""
