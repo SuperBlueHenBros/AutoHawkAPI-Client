@@ -3,7 +3,7 @@ from socket import socket as Socket
 
 from typing import Union
 
-from .exceptions import InvalidRequest
+from .exceptions import InvalidRequest, InvalidResponse
 
 
 
@@ -76,9 +76,14 @@ class Memory:
         socket.shutdown(SHUT_RDWR)
         socket.close()
 
-        # Extract response code and message
-        code, _, message = response.decode('UTF-8').partition('_')
-        code = int(code)
+
+        try:
+            # Extract response code and message
+            code, _, message = response.decode('UTF-8').partition('_')
+            code = int(code)
+        
+        except ValueError:
+            raise InvalidResponse('Response could not be divided into code and message')
 
 
         # Successfully wrote to memory

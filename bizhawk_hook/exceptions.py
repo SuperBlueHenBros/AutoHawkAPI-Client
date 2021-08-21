@@ -9,3 +9,6 @@ class InvalidRequest(BizhawkHookError):
     def __init__(self, code, message):
         super().__init__(message)
         self.code = code
+
+class InvalidResponse(BizhawkHookError):
+    """Response did not follow the parseable format"""
