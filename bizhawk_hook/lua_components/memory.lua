@@ -88,18 +88,13 @@ rcodes = {
 	ERROR   = 4;  -- Generic error
 }
 
-local function response(code, message)
-	return code .. '_' .. message
-end
-
 
 local function handleRequest(data)
 	-- Handle incoming requests for reading from
 	-- and writing to memory with the BizHawk emulator
-	
+
 	domain, address, type, signage, length, endianness, value
         = data:match('^([%w%s]*)%/(%d+)%/([bif])([us])([1234])([lb])%/(-?%d*%.?%d*)$')
-
 	
 	-- Use default domain if none is provided
 	if domain == "" then
@@ -109,9 +104,15 @@ local function handleRequest(data)
 	-- Convert address to integer
 	address = tonumber(address)
 
+	
+	local function response(code, message)
+		-- Format response code and message into a valid response
+		return tostring(code) .. '_' .. tostring(message)
+	end
+
 
 	-- [ READ ]
-	if not value then
+	if value == "" then
 
 		-- [ BYTE ]
 		if type == 'b' then
