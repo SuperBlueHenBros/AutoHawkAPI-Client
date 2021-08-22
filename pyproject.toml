@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "bizhawk_hook"
 version = "0.1.0"
-description = ""
+description = "Communicate with the Bizhawk emulator via a Lua socket"
 authors = ["Maximillian Strand <maximillian.strand@protonmail.com>"]
 
 [tool.poetry.dependencies]
