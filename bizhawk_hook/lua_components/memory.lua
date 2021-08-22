@@ -89,6 +89,12 @@ rcodes = {
 }
 
 
+function format_response(code, message)
+	-- Format response code and message into a valid response
+	return tostring(code) .. '_' .. tostring(message)
+end
+
+
 local function handleRequest(data)
 	-- Handle incoming requests for reading from
 	-- and writing to memory with the BizHawk emulator
@@ -104,19 +110,13 @@ local function handleRequest(data)
 	-- Convert address to integer
 	address = tonumber(address)
 
-	
-	local function response(code, message)
-		-- Format response code and message into a valid response
-		return tostring(code) .. '_' .. tostring(message)
-	end
-
 
 	-- [ READ ]
 	if value == "" then
 
 		-- [ BYTE ]
 		if type == 'b' then
-			return response(
+			return format_response(
 				rcodes.BYTE,
 				memory.readbyte(address, domain)
 			)
@@ -131,7 +131,7 @@ local function handleRequest(data)
 				
 				-- [ 1 BYTE ]
 				if length == '1' then
-					return response(
+					return format_response(
 						rcodes.INTEGER,
 						memory.read_u8(address, domain)
 					)
@@ -142,21 +142,21 @@ local function handleRequest(data)
 					
 					-- [ 2 BYTE ]
 					if length == '2' then
-						return response(
+						return format_response(
 							rcodes.INTEGER,
 							memory.read_u16_le(address, domain)
 						)
 						
 					-- [ 3 BYTE ]
 					elseif length == '3' then
-						return response(
+						return format_response(
 							rcodes.INTEGER,
 							memory.read_u24_le(address, domain)
 						)
 						
 					-- [ 4 BYTE ]
 					elseif length == '4' then
-						return response(
+						return format_response(
 							rcodes.INTEGER,
 							memory.read_u32_le(address, domain)
 						)
@@ -168,21 +168,21 @@ local function handleRequest(data)
 
 					-- [ 2 BYTE ]
 					if length == '2' then
-						return response(
+						return format_response(
 							rcodes.INTEGER,
 							memory.read_u16_be(address, domain)
 						)
 
 					-- [ 3 BYTE ]
 					elseif length == '3' then
-						return response(
+						return format_response(
 							rcodes.INTEGER,
 							memory.read_u24_be(address, domain)
 						)
 
 					-- [ 4 BYTE ]
 					elseif length == '4' then
-						return response(
+						return format_response(
 							rcodes.INTEGER,
 							memory.read_u32_be(address, domain)
 						)
@@ -195,7 +195,7 @@ local function handleRequest(data)
 				
 				-- [ 1 BYTE ]
 				if length == '1' then
-					return response(
+					return format_response(
 						rcodes.INTEGER,
 						memory.read_s8(address, domain)
 					)
@@ -206,21 +206,21 @@ local function handleRequest(data)
 					
 					-- [ 2 BYTE ]
 					if length == '2' then
-						return response(
+						return format_response(
 							rcodes.INTEGER,
 							memory.read_s16_le(address, domain)
 						)
 						
 					-- [ 3 BYTE ]
 					elseif length == '3' then
-						return response(
+						return format_response(
 							rcodes.INTEGER,
 							memory.read_s24_le(address, domain)
 						)
 						
 					-- [ 4 BYTE ]
 					elseif length == '4' then
-						return response(
+						return format_response(
 							rcodes.INTEGER,
 							memory.read_s32_le(address, domain)
 						)
@@ -233,21 +233,21 @@ local function handleRequest(data)
 
 					-- [ 2 BYTE ]
 					if length == '2' then
-						return response(
+						return format_response(
 							rcodes.INTEGER,
 							memory.read_s16_be(address, domain)
 						)
 
 					-- [ 3 BYTE ]
 					elseif length == '3' then
-						return response(
+						return format_response(
 							rcodes.INTEGER,
 							memory.read_s24_be(address, domain)
 						)
 
 					-- [ 4 BYTE ]
 					elseif length == '4' then
-						return response(
+						return format_response(
 							rcodes.INTEGER,
 							memory.read_s32_be(address, domain)
 						)
@@ -263,7 +263,7 @@ local function handleRequest(data)
 			-- Whether the value is big endian or not
 			bigendian = endianness == 'b'
 
-			return response(
+			return format_response(
 				rcodes.FLOAT,
 				memory.readfloat(address, bigendian, domain)
 			)
@@ -278,7 +278,7 @@ local function handleRequest(data)
 
 		-- [ BYTE ]
 		if type == 'b' then
-			return response(
+			return format_response(
 				rcodes.WRITTEN,
 				memory.writebyte(address, value, domain)
 			)
@@ -293,7 +293,7 @@ local function handleRequest(data)
 				
 				-- [ 1 BYTE ]
 				if length == '1' then
-					return response(
+					return format_response(
 						rcodes.WRITTEN,
 						memory.write_u8(address, value, domain)
 					)
@@ -304,21 +304,21 @@ local function handleRequest(data)
 					
 					-- [ 2 BYTE ]
 					if length == '2' then
-						return response(
+						return format_response(
 							rcodes.WRITTEN,
 							memory.write_u16_le(address, value, domain)
 						)
 						
 					-- [ 3 BYTE ]
 					elseif length == '3' then
-						return response(
+						return format_response(
 							rcodes.WRITTEN,
 							memory.write_u24_le(address, value, domain)
 						)
 						
 					-- [ 4 BYTE ]
 					elseif length == '4' then
-						return response(
+						return format_response(
 							rcodes.WRITTEN,
 							memory.write_u32_le(address, value, domain)
 						)
@@ -330,21 +330,21 @@ local function handleRequest(data)
 
 					-- [ 2 BYTE ]
 					if length == '2' then
-						return response(
+						return format_response(
 							rcodes.WRITTEN,
 							memory.write_u16_be(address, value, domain)
 						)
 
 					-- [ 3 BYTE ]
 					elseif length == '3' then
-						return response(
+						return format_response(
 							rcodes.WRITTEN,
 							memory.write_u24_be(address, value, domain)
 						)
 
 					-- [ 4 BYTE ]
 					elseif length == '4' then
-						return response(
+						return format_response(
 							rcodes.WRITTEN,
 							memory.write_u32_be(address, value, domain)
 						)
@@ -357,7 +357,7 @@ local function handleRequest(data)
 				
 				-- [ 1 BYTE ]
 				if length == '1' then
-					return response(
+					return format_response(
 						rcodes.WRITTEN,
 						memory.write_s8(address, value, domain)
 					)
@@ -368,21 +368,21 @@ local function handleRequest(data)
 					
 					-- [ 2 BYTE ]
 					if length == '2' then
-						return response(
+						return format_response(
 							rcodes.WRITTEN,
 							memory.write_s16_le(address, value, domain)
 						)
 						
 					-- [ 3 BYTE ]
 					elseif length == '3' then
-						return response(
+						return format_response(
 							rcodes.WRITTEN,
 							memory.write_s24_le(address, value, domain)
 						)
 						
 					-- [ 4 BYTE ]
 					elseif length == '4' then
-						return response(
+						return format_response(
 							rcodes.WRITTEN,
 							memory.write_s32_le(address, value, domain)
 						)
@@ -394,21 +394,21 @@ local function handleRequest(data)
 
 					-- [ 2 BYTE ]
 					if length == '2' then
-						return response(
+						return format_response(
 							rcodes.WRITTEN,
 							memory.write_s16_be(address, value, domain)
 						)
 
 					-- [ 3 BYTE ]
 					elseif length == '3' then
-						return response(
+						return format_response(
 							rcodes.WRITTEN,
 							memory.write_s24_be(address, value, domain)
 						)
 
 					-- [ 4 BYTE ]
 					elseif length == '4' then
-						return response(
+						return format_response(
 							rcodes.WRITTEN,
 							memory.write_s32_be(address, value, domain)
 						)
@@ -423,7 +423,7 @@ local function handleRequest(data)
 			-- Whether the value is big endian or not
 			bigendian = endianness == 'b'
 
-			return response(
+			return format_response(
 				rcodes.WRITTEN,
 				memory.writefloat(address, value, bigendian, domain)
 			)
@@ -433,7 +433,7 @@ local function handleRequest(data)
 
 	-- If nothing is matched,
 	-- let the client know that something's gone wrong
-	return response(rcodes.ERROR, 'INVALID_REQUEST')
+	return format_response(rcodes.ERROR, 'INVALID_REQUEST')
 end
 
 local function clientHandler(client)
