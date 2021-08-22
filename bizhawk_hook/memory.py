@@ -1,5 +1,6 @@
 from socket import AF_INET, SOCK_STREAM, SHUT_RDWR
 from socket import socket as Socket
+from socket import create_connection
 
 from typing import Union
 
@@ -54,27 +55,15 @@ class Memory:
             [2] bytes long and [l]ittle endian
         """
 
-        # Set up and connect to socket
-    
-        # (This uses a new connection every time for convenience
-        # on the client end. The difference between a temporary
-        # and a maintained connection should be negligable.)
-
-        socket = Socket(AF_INET, SOCK_STREAM)
-        socket.settimeout(5)
-        socket.connect((self.address, self.port))
-
-        # Make sure query is a byte string
+        # Socket requires a byte string to send
         if type(query) is not bytes:
             query = query.encode()
 
-        # Send request and expect response
-        socket.sendall(query)
-        response = self._receive(socket)
 
-        # Close connection
-        socket.shutdown(SHUT_RDWR)
-        socket.close()
+        with create_connection((self.address, self.port)) as socket:
+            # Send request and expect response
+            socket.sendall(query)
+            response = self._receive(socket)
 
 
         try:
