@@ -11,8 +11,19 @@ from .exceptions import InvalidRequest, InvalidResponse
 class Memory:
     """Client for reading from and writing to Bizhawk memory"""
 
-    def __init__(self, domain: str, address: str='127.0.0.1', port: int=16154):
+    def __init__(self, 
+        # Memory domain
+        domain: str,
+        # Default arguments for all operations
+        signed: int=False, length: int=1, endianness: str='big',
+        # Address and port for socket connection
+        address: str='127.0.0.1', port: int=16154
+    ):
         self.domain = domain
+
+        self.default_signed = signed
+        self.default_length = length
+        self.default_endianness = endianness
         
         self.address = address
         self.port = port
@@ -156,43 +167,43 @@ class Memory:
             value=value
         ))
 
-    def read_int(self, address: int, signed: bool=False, length: int=1, endianness: str='big'):
+    def read_int(self, address: int, signed: bool=None, length: int=None, endianness: str=None):
         """Read integer from memory"""
         return self._request(self._format_query(
             address=address,
             type_=int,
-            signed=signed,
-            length=length,
-            endianness=endianness,
+            signed=signed or self.default_signed,
+            length=length or self.default_length,
+            endianness=endianness or self.default_endianness,
             value=None
         ))
 
-    def write_int(self, address: int, value: int, signed: bool=False, length: int=1, endianness: str='big'):
+    def write_int(self, address: int, value: int, signed: bool=None, length: int=None, endianness: str=None):
         """Write integer from memory"""
         return self._request(self._format_query(
             address=address,
             type_=int,
-            signed=signed,
-            length=length,
-            endianness=endianness,
+            signed=signed or self.default_signed,
+            length=length or self.default_length,
+            endianness=endianness or self.default_endianness,
             value=value
         ))
 
-    def read_float(self, address: int, endianness: str='big'):
+    def read_float(self, address: int, endianness: str=None):
         """Read float from memory"""
         return self._request(self._format_query(
             address=address,
             type_=float,
-            endianness=endianness,
+            endianness=endianness or self.default_endianness,
             value=None
         ))
 
-    def write_float(self, address: int, value: float, endianness: str='big'):
+    def write_float(self, address: int, value: float, endianness: str=None):
         """Write float from memory"""
         return self._request(self._format_query(
             address=address,
             type_=float,
-            endianness=endianness,
+            endianness=endianness or self.default_endianness,
             value=value
         ))
 
