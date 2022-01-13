@@ -187,7 +187,7 @@ class Memory:
             value=None
         ))
 
-    def write_float(self, address: int, value: int, endianness: str='big'):
+    def write_float(self, address: int, value: float, endianness: str='big'):
         """Write float from memory"""
         return self._request(self._format_query(
             address=address,
