@@ -251,40 +251,40 @@ class Memory:
         return self.read_int(address, signed=True, length=4, endianness='little')
 
     def write_u8(self, address: int, value: int):
-        return self.write_int(address, signed=False, length=1)
+        return self.write_int(address, value, signed=False, length=1)
 
     def write_u16_be(self, address: int, value: int):
-        return self.write_int(address, signed=False, length=2, endianness='big')
+        return self.write_int(address, value, signed=False, length=2, endianness='big')
 
     def write_u24_be(self, address: int, value: int):
-        return self.write_int(address, signed=False, length=3, endianness='big')
+        return self.write_int(address, value, signed=False, length=3, endianness='big')
 
     def write_u32_be(self, address: int, value: int):
-        return self.write_int(address, signed=False, length=4, endianness='big')
+        return self.write_int(address, value, signed=False, length=4, endianness='big')
 
     def write_u16_le(self, address: int, value: int):
-        return self.write_int(address, signed=False, length=2, endianness='little')
+        return self.write_int(address, value, signed=False, length=2, endianness='little')
 
     def write_u24_le(self, address: int, value: int):
-        return self.write_int(address, signed=False, length=3, endianness='little')
+        return self.write_int(address, value, signed=False, length=3, endianness='little')
 
     def write_u32_le(self, address: int, value: int):
-        return self.write_int(address, signed=False, length=4, endianness='little')
+        return self.write_int(address, value, signed=False, length=4, endianness='little')
 
     def write_s16_be(self, address: int, value: int):
-        return self.write_int(address, signed=True, length=2, endianness='big')
+        return self.write_int(address, value, signed=True, length=2, endianness='big')
 
     def write_s24_be(self, address: int, value: int):
-        return self.write_int(address, signed=True, length=3, endianness='big')
+        return self.write_int(address, value, signed=True, length=3, endianness='big')
 
     def write_s32_be(self, address: int, value: int):
-        return self.write_int(address, signed=True, length=4, endianness='big')
+        return self.write_int(address, value, signed=True, length=4, endianness='big')
 
     def write_s16_le(self, address: int, value: int):
-        return self.write_int(address, signed=True, length=2, endianness='little')
+        return self.write_int(address, value, signed=True, length=2, endianness='little')
 
     def write_s24_le(self, address: int, value: int):
-        return self.write_int(address, signed=True, length=3, endianness='little')
+        return self.write_int(address, value, signed=True, length=3, endianness='little')
 
     def write_s32_le(self, address: int, value: int):
-        return self.write_int(address, signed=True, length=4, endianness='little')
+        return self.write_int(address, value, signed=True, length=4, endianness='little')
