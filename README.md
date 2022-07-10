@@ -16,6 +16,8 @@ export_lua_components('/home/williamson/.bizhook')
 ```
 You can either provide a path or leave it empty to have it open up a file dialogue asking for directory.
 
+_The dialogue window may not work on all systems. If an error occurs, you'll simply have to provide the path as an argument._
+
 #### Opening socket
 
 In Bizhawk, go to `Tools` > `Lua Console`. Select `Open script` and open `hook.lua` from the exported components.
