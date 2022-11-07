@@ -149,5 +149,5 @@ class Memory:
 
     def read_byte(self, address: int):
         """Read byte from memory"""
-        q = self.build_query(address)
+        q = self.build_query(QUERY_TYPE["READ"], address)
         return self._request(q)
