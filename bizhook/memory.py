@@ -12,7 +12,7 @@ QUERY_TYPE = {
 }
 '''
 Planned:
-emulator:
+client:
     load rom
     reset?
 '''
@@ -127,13 +127,20 @@ class Memory:
 
         if query_type == QUERY_TYPE['INPUT']:
             # 0 / button_name / button_state /
-            query = str(query_type) + DELIMITER + button_name + DELIMITER + str(button_state) + DELIMITER
-            pass
+            try:
+                query = str(query_type) + DELIMITER + button_name + DELIMITER + str(button_state) + DELIMITER
+                return query
+            except TypeError as e:
+                raise(f"Arguments missing from query...\n{e}")
+            
 
         elif query_type == QUERY_TYPE['READ']:
             # 1 / domain / address /
-            query = str(query_type) + DELIMITER + str(self.domain) + DELIMITER + str(address) + DELIMITER
-            return query
+            try:
+                query = str(query_type) + DELIMITER + str(self.domain) + DELIMITER + str(address) + DELIMITER
+                return query
+            except TypeError as e:
+                raise(f"Arguments missing from query...\n{e}")
 
         else:
             raise("Invalid argument type")
