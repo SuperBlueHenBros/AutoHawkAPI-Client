@@ -4,7 +4,7 @@ from socket import create_connection
 
 from .exceptions import InvalidRequest, InvalidResponse
 
-FORM = {
+QUERY_TYPE = {
     "INPUT": 0,
     "READ": 1,
     "WRITE": 2,
@@ -113,7 +113,7 @@ class Memory:
 
         return b''.join(buffer)
 
-    def build_query(self, form, address=0x00):
+    def build_query(self, query_type, address=0x00):
         '''
         [input]
         0 /  button
@@ -123,12 +123,12 @@ class Memory:
 
         '''
 
-        if form == FORM['INPUT']:
+        if query_type == QUERY_TYPE['INPUT']:
             pass
 
-        elif form == FORM['READ']:
-            # form / domain / address
-            query = str(form) + DELIMITER + str(self.domain) + DELIMITER + str(address)
+        elif query_type == QUERY_TYPE['READ']:
+            # query_type / domain / address
+            query = str(query_type) + DELIMITER + str(self.domain) + DELIMITER + str(address) + DELIMITER
             return query
 
         else:
