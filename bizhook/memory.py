@@ -1,6 +1,7 @@
 from socket import AF_INET, SOCK_STREAM, SHUT_RDWR
 from socket import socket as Socket
 from socket import create_connection
+import time
 
 from .exceptions import InvalidRequest, InvalidResponse
 
@@ -54,14 +55,16 @@ class Memory:
 
 
     def _request(self, query):
+        # print("_request")
 
         # Socket requires a byte string to send
         if type(query) is not bytes:
             query = query.encode()
 
-        print(query.decode('ascii'))
+        print("_request: query:", query.decode('ascii'))
 
         with create_connection((self.address, self.port)) as socket:
+            # print("_request: sending")
             # Send request and expect response
             socket.sendall(query)
             response = self._receive(socket)
@@ -71,6 +74,7 @@ class Memory:
             # Extract response code and message
             code, _, message = response.decode('UTF-8').partition('_')
             code = int(code)
+            print(f"_request: code={code} message={message}")
         
         except ValueError:
             raise InvalidResponse('Response could not be divided into code and message')
@@ -102,11 +106,11 @@ class Memory:
         # and concatenate them at the end
 
         buffer = []
-
         while True:
             data = socket.recv(n)
 
             if not data:
+                print("_receive: no data")
                 break
 
             buffer.append(data)
@@ -124,7 +128,6 @@ class Memory:
         1 / domain / address /
 
         '''
-
         if query_type == QUERY_TYPE['INPUT']:
             # 0 / button_name / button_state /
             try:
