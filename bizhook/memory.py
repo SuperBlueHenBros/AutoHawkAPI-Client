@@ -113,17 +113,18 @@ class Memory:
 
         return b''.join(buffer)
 
-    def build_query(self, query_type, address=0x00):
+    def build_query(self, query_type, address=0x00, button_name: str=None, button_state: bool=None):
         '''
         [input]
-        0 /  button
+        0 / button_name / button_state /
 
         [read bytes]
-        1 / domain / address
+        1 / domain / address /
 
         '''
 
         if query_type == QUERY_TYPE['INPUT']:
+            query = str(query_type) + DELIMITER + button_name + DELIMITER + str(button_state) + DELIMITER
             pass
 
         elif query_type == QUERY_TYPE['READ']:
