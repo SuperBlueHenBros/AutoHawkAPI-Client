@@ -61,7 +61,7 @@ class Memory:
         if type(query) is not bytes:
             query = query.encode()
 
-        print("_request: query:", query.decode('ascii'))
+        # print("_request: query:", query.decode('ascii'))
 
         with create_connection((self.address, self.port)) as socket:
             # print("_request: sending")
@@ -74,7 +74,7 @@ class Memory:
             # Extract response code and message
             code, _, message = response.decode('UTF-8').partition('_')
             code = int(code)
-            print(f"_request: code={code} message={message}")
+            # print(f"_request: code={code} message={message}")
         
         except ValueError:
             raise InvalidResponse('Response could not be divided into code and message')
@@ -110,7 +110,7 @@ class Memory:
             data = socket.recv(n)
 
             if not data:
-                print("_receive: no data")
+                # print("_receive: no data")
                 break
 
             buffer.append(data)
