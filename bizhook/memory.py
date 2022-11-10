@@ -1,37 +1,33 @@
 from socket import AF_INET, SOCK_STREAM, SHUT_RDWR
 from socket import socket as Socket
 from socket import create_connection
-import time
 
 from .exceptions import InvalidRequest, InvalidResponse
 
-QUERY_TYPE = {
-    "INPUT": 0,
-    "READ": 1,
-    "WRITE": 2,
-    "CLIENT": 3
-}
 '''
 Planned:
 client:
     load rom
     reset?
 '''
+QUERY_TYPE = {
+    "INPUT": 0,
+    "READ": 1,
+    "WRITE": 2,
+    "CLIENT": 3
+}
+
+RESPONSE_CODES = {
+	"INPUT":    0,  # Successfully passed input
+	"BYTE":     1,  # Successfully read byte
+	"INTEGER":  2,  # Successfully read integer
+	"FLOAT":    3,  # Successfully read float
+	"ERROR":    4   # Generic error
+}
+
 
 DELIMITER = '/'
 
-# BUTTON_TRANSLATE = {
-#     "P1 A": 0,
-#     "P1 B": 1,
-#     "P1 Down": 2,
-#     "P1 Left": 3,
-#     "P1 Right": 4,
-#     "P1 Select": 5,
-#     "P1 Start": 6,
-#     "P1 Up": 7,
-#     "Power": 8,
-#     "Reset": 9
-# }
 
 class Memory:
     """Client for reading from and writing to Bizhawk memory"""
@@ -81,19 +77,19 @@ class Memory:
 
 
         # Successfully wrote to memory
-        if code == 0:
+        if code == RESPONSE_CODES["INPUT"]:
             return True
 
         # Successfully read byte
-        if code == 1:
+        if code == RESPONSE_CODES["BYTE"]:
             return response[response.index(b'_'):]
 
         # Successfully read integer
-        if code == 2:
+        if code == RESPONSE_CODES["INTEGER"]:
             return int(message)
 
         # Successfully read float
-        if code == 3:
+        if code == RESPONSE_CODES["FLOAT"]:
             return float(message)
 
 
@@ -152,5 +148,10 @@ class Memory:
 
     def read_byte(self, address: int):
         """Read byte from memory"""
-        q = self.build_query(QUERY_TYPE["READ"], address)
+        q = self.build_query(QUERY_TYPE["READ"], address=address)
+        return self._request(q)
+
+    def send_input(self, key_name: str, key_state: bool):
+        """Pass input to emulator"""
+        q = self.build_query(QUERY_TYPE["INPUT"], button_name=key_name, button_state=key_state)
         return self._request(q)
