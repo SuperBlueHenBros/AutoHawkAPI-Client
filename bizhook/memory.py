@@ -131,7 +131,8 @@ class Memory:
 
     # TODO: get rid of this universal function implimentation and just make each query it's own function. 
     #       this format made more sense when all queries had the same basic arguments
-    def build_query(self, query_type: int, address: int=0x00, button_name: str=None, button_state: bool=None, client_type: int=None):
+    def build_query(self, query_type: int, address: int=0x00, button_name: str=None, 
+                    button_state: bool=None, client_type: int=None, frames: int=None):
         '''
         QUERY FORMATS:
 
@@ -142,7 +143,7 @@ class Memory:
         1 / domain / address /
 
         [advance frame]
-        3 / 0 /
+        3 / 0 / frames / 
 
         '''
         if query_type == QUERY_TYPE['INPUT']:
@@ -163,9 +164,9 @@ class Memory:
                 raise(f"Arguments missing from query...\n{e}")
 
         elif query_type == QUERY_TYPE['CLIENT']:
-            # 3 / 0 /
+            # 3 / 0 / frames /
             try:
-                query = str(query_type) + DELIMITER + str(client_type) + DELIMITER
+                query = str(query_type) + DELIMITER + str(client_type) + DELIMITER + str(frames) + DELIMITER
                 return query
             except TypeError as e:
                 raise(f"Arguments missing from query...\n{e}")
@@ -185,7 +186,7 @@ class Memory:
         q = self.build_query(QUERY_TYPE["INPUT"], button_name=key_name, button_state=key_state)
         return self._request(q)
 
-    def advance_frame(self):
+    def advance_frame(self, frames=1):
         """Tell emulator to advance frame"""
-        q = self.build_query(QUERY_TYPE["CLIENT"], client_type=CLIENT_TYPE["ADVANCE"])
+        q = self.build_query(QUERY_TYPE["CLIENT"], client_type=CLIENT_TYPE["ADVANCE"], frames=frames)
         return self._request(q)
