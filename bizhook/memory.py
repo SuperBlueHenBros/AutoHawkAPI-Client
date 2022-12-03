@@ -18,7 +18,9 @@ QUERY_TYPE = {
 }
 
 CLIENT_TYPE = {
-    "ADVANCE": 0
+    "ADVANCE": 0,
+    "SAVE": 1,
+    "LOAD": 2,
 }
 
 RESPONSE_CODES = {
@@ -164,16 +166,34 @@ class Memory:
                 raise(f"Arguments missing from query...\n{e}")
 
         elif query_type == QUERY_TYPE['CLIENT']:
-            # 3 / 0 / frames /
-            try:
-                query = str(query_type) + DELIMITER + str(client_type) + DELIMITER + str(frames) + DELIMITER
-                return query
-            except TypeError as e:
-                raise(f"Arguments missing from query...\n{e}")
+            if client_type == CLIENT_TYPE["ADVANCE"]:
+                # 3 / 0 / frames /
+                try:
+                    query = str(query_type) + DELIMITER + str(client_type) + DELIMITER + str(frames) + DELIMITER
+                    return query
+                except TypeError as e:
+                    raise(f"Arguments missing from query...\n{e}")
 
+            elif client_type == CLIENT_TYPE["SAVE"]:
+                # 3 / 1 / 
+                try:
+                    query = str(query_type) + DELIMITER + str(client_type) + DELIMITER
+                    return query
+                except TypeError as e:
+                    raise(f"Arguments missing from query...\n{e}")
+
+            
+            elif client_type == CLIENT_TYPE["LOAD"]:
+                # 3 / 2 / 
+                try:
+                    query = str(query_type) + DELIMITER + str(client_type) + DELIMITER
+                    return query
+                except TypeError as e:
+                    raise(f"Arguments missing from query...\n{e}")
+                
         else:
             raise("Invalid argument type")
-
+            
         return 
 
     def read_byte(self, address: int):
@@ -189,4 +209,12 @@ class Memory:
     def advance_frame(self, frames=1):
         """Tell emulator to advance frame"""
         q = self.build_query(QUERY_TYPE["CLIENT"], client_type=CLIENT_TYPE["ADVANCE"], frames=frames)
+        return self._request(q)
+
+    def save_state(self):
+        q = self.build_query(QUERY_TYPE["CLIENT"], client_type=CLIENT_TYPE["SAVE"])
+        return self._request(q)
+
+    def load_state(self):
+        q = self.build_query(QUERY_TYPE["CLIENT"], client_type=CLIENT_TYPE["LOAD"])
         return self._request(q)
