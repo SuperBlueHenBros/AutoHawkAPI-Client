@@ -117,10 +117,10 @@ class Memory:
             try:
                 data = socket.recv(n)
             except ConnectionResetError as e:
-                print("ConnectionResetError:", e)
+                # print("ConnectionResetError:", e)
                 break
             except ConnectionAbortedError as e:
-                print("ConnectionAbortedError:", e)
+                # print("ConnectionAbortedError:", e)
                 break
 
             if not data:
@@ -212,9 +212,11 @@ class Memory:
         return self._request(q)
 
     def save_state(self):
+        """Tell emulator to save current state to slot 0"""
         q = self.build_query(QUERY_TYPE["CLIENT"], client_type=CLIENT_TYPE["SAVE"])
         return self._request(q)
 
     def load_state(self):
+        """Tell emulator to load the state saved to slot 0"""
         q = self.build_query(QUERY_TYPE["CLIENT"], client_type=CLIENT_TYPE["LOAD"])
         return self._request(q)
