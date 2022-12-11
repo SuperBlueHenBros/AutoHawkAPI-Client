@@ -41,3 +41,7 @@ To see the available methods, do `help(Memory)`.
 
 #### Memory domain
 You can use the default memory domain by providing an empty string. However, I would advice against it and that you always do specify with which domain you want to interact. It may be that it works for you solely because, per chance, the default one happens to be the correct one.
+
+## Credits
+
+This project is based on code written by Maximillian Strand. It should be noted that despite having the same name, these projects are not compatible or interchangeable as the API has been changed completely.
