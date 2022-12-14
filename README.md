@@ -1,6 +1,6 @@
 # Python Socket Client and API for Bizhawk
 
-Interact with [Bizhawk](http://tasvideos.org/Bizhawk.html) via a socket server hosted in the Lua Console.
+Interact with [Bizhawk](http://tasvideos.org/Bizhawk.html) via a socket server hosted in Bizhawk's Lua console.
 
 ## How to use
 
