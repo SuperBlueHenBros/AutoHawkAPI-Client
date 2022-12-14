@@ -17,11 +17,17 @@ QUERY_TYPE = {
     "CLIENT": 3
 }
 
+CLIENT_TYPE = {
+    "ADVANCE": 0,
+    "SAVE": 1,
+    "LOAD": 2,
+}
+
 RESPONSE_CODES = {
 	"INPUT":    0,  # Successfully passed input
 	"BYTE":     1,  # Successfully read byte
 	"INTEGER":  2,  # Successfully read integer
-	"FLOAT":    3,  # Successfully read float
+	"CLIENT":    3,  # Successfully read float
 	"ERROR":    4   # Generic error
 }
 
@@ -65,11 +71,13 @@ class Memory:
             socket.sendall(query)
             response = self._receive(socket)
 
-
         try:
             # Extract response code and message
             code, _, message = response.decode('UTF-8').partition('_')
-            code = int(code)
+            if code == '':
+                code = 4
+            else:
+                code = int(code)
             # print(f"_request: code={code} message={message}")
         
         except ValueError:
@@ -88,9 +96,12 @@ class Memory:
         if code == RESPONSE_CODES["INTEGER"]:
             return int(message)
 
-        # Successfully read float
-        if code == RESPONSE_CODES["FLOAT"]:
-            return float(message)
+        # Successfully modified client
+        if code == RESPONSE_CODES["CLIENT"]:
+            return True
+
+        if code == RESPONSE_CODES["ERROR"]:
+            return False
 
 
         raise InvalidRequest(code, message)
@@ -103,7 +114,14 @@ class Memory:
 
         buffer = []
         while True:
-            data = socket.recv(n)
+            try:
+                data = socket.recv(n)
+            except ConnectionResetError as e:
+                # print("ConnectionResetError:", e)
+                break
+            except ConnectionAbortedError as e:
+                # print("ConnectionAbortedError:", e)
+                break
 
             if not data:
                 # print("_receive: no data")
@@ -113,7 +131,10 @@ class Memory:
 
         return b''.join(buffer)
 
-    def build_query(self, query_type: int, address: int=0x00, button_name: str=None, button_state: bool=None):
+    # TODO: get rid of this universal function implimentation and just make each query it's own function. 
+    #       this format made more sense when all queries had the same basic arguments
+    def build_query(self, query_type: int, address: int=0x00, button_name: str=None, 
+                    button_state: bool=None, client_type: int=None, frames: int=None):
         '''
         QUERY FORMATS:
 
@@ -122,6 +143,9 @@ class Memory:
 
         [read bytes]
         1 / domain / address /
+
+        [advance frame]
+        3 / 0 / frames / 
 
         '''
         if query_type == QUERY_TYPE['INPUT']:
@@ -141,9 +165,35 @@ class Memory:
             except TypeError as e:
                 raise(f"Arguments missing from query...\n{e}")
 
+        elif query_type == QUERY_TYPE['CLIENT']:
+            if client_type == CLIENT_TYPE["ADVANCE"]:
+                # 3 / 0 / frames /
+                try:
+                    query = str(query_type) + DELIMITER + str(client_type) + DELIMITER + str(frames) + DELIMITER
+                    return query
+                except TypeError as e:
+                    raise(f"Arguments missing from query...\n{e}")
+
+            elif client_type == CLIENT_TYPE["SAVE"]:
+                # 3 / 1 / 
+                try:
+                    query = str(query_type) + DELIMITER + str(client_type) + DELIMITER
+                    return query
+                except TypeError as e:
+                    raise(f"Arguments missing from query...\n{e}")
+
+            
+            elif client_type == CLIENT_TYPE["LOAD"]:
+                # 3 / 2 / 
+                try:
+                    query = str(query_type) + DELIMITER + str(client_type) + DELIMITER
+                    return query
+                except TypeError as e:
+                    raise(f"Arguments missing from query...\n{e}")
+                
         else:
             raise("Invalid argument type")
-
+            
         return 
 
     def read_byte(self, address: int):
@@ -154,4 +204,19 @@ class Memory:
     def send_input(self, key_name: str, key_state: bool):
         """Pass input to emulator"""
         q = self.build_query(QUERY_TYPE["INPUT"], button_name=key_name, button_state=key_state)
+        return self._request(q)
+
+    def advance_frame(self, frames=1):
+        """Tell emulator to advance frame"""
+        q = self.build_query(QUERY_TYPE["CLIENT"], client_type=CLIENT_TYPE["ADVANCE"], frames=frames)
+        return self._request(q)
+
+    def save_state(self):
+        """Tell emulator to save current state to slot 0"""
+        q = self.build_query(QUERY_TYPE["CLIENT"], client_type=CLIENT_TYPE["SAVE"])
+        return self._request(q)
+
+    def load_state(self):
+        """Tell emulator to load the state saved to slot 0"""
+        q = self.build_query(QUERY_TYPE["CLIENT"], client_type=CLIENT_TYPE["LOAD"])
         return self._request(q)
