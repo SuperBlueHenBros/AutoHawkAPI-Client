@@ -1,4 +1,4 @@
-# Bizhawk Hook
+# Python Socket Client and API for Bizhawk
 
 Interact with [Bizhawk](http://tasvideos.org/Bizhawk.html) via a socket server hosted in the Lua Console.
 
@@ -8,27 +8,11 @@ Interact with [Bizhawk](http://tasvideos.org/Bizhawk.html) via a socket server h
 
 #### Exporting
 
-Export all the necessary Lua components using the provided function.
-```py
-from bizhook import export_lua_components
-
-export_lua_components('/home/williamson/.bizhook')
-```
-You can either provide a path or leave it empty to have it open up a file dialogue asking for directory.
-
-_The dialogue window may not work on all systems. If an error occurs, you'll simply have to provide the path as an argument._
-
-#### Opening socket
-
-In Bizhawk, go to `Tools` > `Lua Console`. Select `Open script` and open `hook.lua` from the exported components.
-
-##### Is it working?
-
-If it starts successfully, you should see a text in the top-left of the emulator saying the socket is being opened. Should that not appear, try restarting the emulator until it does. This seems to be an issue with Bizhawk.
-
-**Note**: Do not try to communicate with the socket *before* the text has disappeared, as it isn't actually opened yet. The message is there to make it clear that the script is running successfully.
+Exporting the lua hook is currently not supported as development has been moved from the .zip to its own independent repo. This feature will either be updated or removed entirely.
 
 ### Python
+
+All Python usage is currently built around the `Memory` object for legacy reasons. This approach will most likely be changed in future updates.
 
 You can read from and write to memory by using a `Memory` object.
 ```py
@@ -44,4 +28,4 @@ You can use the default memory domain by providing an empty string. However, I w
 
 ## Credits
 
-This project is based on code written by Maximillian Strand. It should be noted that despite having the same name, these projects are not compatible or interchangeable as the API has been changed completely.
+This project is based on code written by Maximillian Strand. It should be noted that despite having the same name, these projects are not compatible or interchangeable as the API has been changed completely. 
